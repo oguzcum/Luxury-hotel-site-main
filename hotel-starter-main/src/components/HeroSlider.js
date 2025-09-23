@@ -7,9 +7,9 @@ import 'swiper/css/effect-fade';
 // import required modules
 import {EffectFade, Autoplay} from 'swiper';
 //images
-import Img1 from '../assets/img/heroSlider/1.jpg';
-import Img2 from '../assets/img/heroSlider/2.jpg';
-import Img3 from '../assets/img/heroSlider/3.jpg';
+const Img1 = '/balatodalar/Artist Antik 1/1e4.jpg';
+const Img2 = '/balatodalar/Pinkom 4/pinkom4e2.jpg';
+const Img3 = '../assets/img/heroSlider/3.jpg';
 
 const slides = [
   {

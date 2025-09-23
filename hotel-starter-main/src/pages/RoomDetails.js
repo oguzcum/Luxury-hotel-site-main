@@ -33,24 +33,33 @@ const RoomDetails = () => {
     return <h2 className="text-center mt-20">Oda bulunamadı</h2>;
   }
 
-  const { name, description, facilities = [] } = room;
+  const { name, image, description, facilities = [] } = room;
 
   return (
     <section>
       <ScrollToTop />
       {/* Kapak */}
-      <div className="bg-room bg-cover bg-center h-[560px] relative flex justify-center items-center">
-        <div className="absolute w-full h-full bg-black/70"></div>
-        <h1 className="text-6xl text-white z-20 font-primary text-center">
-          {name} Detayları
-        </h1>
-      </div>
+      <div className="bg-cover bg-center h-[560px] relative flex justify-center items-center">
+    {/* Resim */}
+    <img
+      className="absolute w-full h-full object-cover"
+      src={image}
+      alt={name}
+    />
+    {/* Overlay - bu div resmin üzerinde siyah transparan katman olacak */}
+    <div className="absolute w-full h-full bg-black/70"></div>
+    {/* Başlık */}
+    <h1 className="text-6xl text-white z-20 font-primary text-center">
+      {name} Detayları
+    </h1>
+  </div>
+      
 
       <div className="container mx-auto py-24 flex flex-col lg:flex-row">
         {/* Sol - Fotoğraf Galerisi ve Açıklama */}
         <div className="w-full lg:w-[60%] px-6">
           <h2 className="h2">{name}</h2>
-          <p className="mb-8">{description}</p>
+          
 
           {/* Fotoğraf Galerisi */}
           {images.length > 0 && (
@@ -96,7 +105,7 @@ const RoomDetails = () => {
           <div>
             <h3 className="h3 mb-3">Oda Özellikleri</h3>
             <p className="mb-6">
-              Problem çözme ve analitik düşünme becerilerimle, sorunları öngörüp hızlı ve etkili çözümler geliştirebiliyorum. Üniversite projelerinde "Analist" olarak görev aldım ve takım çalışması ile riskli ortamlarda dahi projeleri başarıyla tamamladık.
+              {description}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {facilities.map((item, index) => {

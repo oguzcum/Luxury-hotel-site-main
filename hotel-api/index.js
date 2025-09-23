@@ -23,11 +23,10 @@ const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) return res.sendStatus(401); // Token yoksa
+  if (!token) return res.sendStatus(401);
 
   jwt.verify(token, SECRET_KEY, (err, user) => {
-    if (err) return res.sendStatus(403); // Token geçersiz
+    if (err) return res.sendStatus(403);
     req.user = user;
     next();
   });
@@ -44,12 +43,9 @@ app.post("/api/admin", async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res
-        .status(401)
-        .json({ error: "Geçersiz kullanıcı adı veya şifre" });
+      return res.status(401).json({ error: "Geçersiz kullanıcı adı veya şifre" });
     }
 
-    // Token oluştur
     const token = jwt.sign(
       { id: rows[0].id, username: rows[0].username },
       SECRET_KEY,
@@ -74,11 +70,14 @@ app.get("/api/rooms", async (req, res) => {
   }
 });
 
-
+// 🔹 Oda görselleri
 app.get("/api/room_images/:id", async (req, res) => {
   try {
-    const {id} = req.params;
-    const [rows] = await pool.query("SELECT image_path FROM room_images WHERE room_id = ?", [id]);
+    const { id } = req.params;
+    const [rows] = await pool.query(
+      "SELECT image_path FROM room_images WHERE room_id = ?",
+      [id]
+    );
     res.json(rows);
   } catch (err) {
     console.error("Room images fetch error:", err);
@@ -86,19 +85,19 @@ app.get("/api/room_images/:id", async (req, res) => {
   }
 });
 
-// 🔹 Fiyat güncelle (sadece admin)
+// 🔹 Fiyat / açıklama güncelle (Admin)
 app.put("/api/rooms/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const { price } = req.body;
+  const { price, description } = req.body;
 
-  if (!price || isNaN(price)) {
-    return res.status(400).json({ error: "Geçerli bir fiyat girin" });
+  if (!price && !description) {
+    return res.status(400).json({ error: "Güncellenecek veri girilmedi" });
   }
 
   try {
     const [result] = await pool.query(
-      "UPDATE rooms SET price = ? WHERE id = ?",
-      [price, id]
+      "UPDATE rooms SET price = COALESCE(?, price), description = COALESCE(?, description) WHERE id = ?",
+      [price ?? null, description ?? null, id]
     );
 
     if (result.affectedRows === 0) {
@@ -108,10 +107,10 @@ app.put("/api/rooms/:id", authenticateToken, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error("Update error:", err);
-    res.status(500).json({ error: "Fiyat güncellenemedi" });
+    res.status(500).json({ error: "Güncelleme başarısız" });
   }
 });
 
 // 🔹 Sunucu başlat
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));

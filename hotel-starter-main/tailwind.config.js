@@ -25,9 +25,7 @@ module.exports = {
 hover: '#aa2747',   // daha koyu pembe ton (hover durum)
         },
       },
-      backgroundImage: {
-        room: "url('./assets/img/room.jpg')",
-      },
+      
     },
   },
   plugins: [],
