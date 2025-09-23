@@ -142,11 +142,11 @@ const AdminPanel = () => {
       </div>
 
       {showLogin && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-80">
-            <LoginBox onClose={() => setShowLogin(false)} />
-          </div>
-        </div>
+        <div className="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center z-50">
+                  <div className="bg-white p-6 rounded-lg shadow-xl w-80">
+                    <LoginBox onClose={() => setShowLogin(false)} />
+                  </div>
+                </div>
       )}
     </div>
   );
