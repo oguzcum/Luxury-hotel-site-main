@@ -2,8 +2,7 @@ import React, { useContext } from 'react';
 //components
 import AdultsDropdown from '../components/AdultsDropdown';
 import KidsDropdown from '../components/KidsDropdown';
-import CheckIn from '../components/CheckIn';
-import CheckOut from '../components/CheckOut';
+
 import { RoomContext } from '../context/RoomContext';
 import Refresh from './Refresh';
 import RoomType from './RoomsType'
