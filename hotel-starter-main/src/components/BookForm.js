@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 //components
-import AdultsDropdown from '../components/AdultsDropdown';
-import KidsDropdown from '../components/KidsDropdown';
+
 
 import { RoomContext } from '../context/RoomContext';
 import Refresh from './Refresh';
 import RoomType from './RoomsType'
+import CheckIn from './CheckIn';
 
 const BookForm = () => {
   const {handleClick} = useContext(RoomContext)
@@ -14,11 +14,8 @@ const BookForm = () => {
       <div className='flex-1 border-r'>
         <RoomType />
       </div>
-      <div className='flex-1 border-r'>
-        <AdultsDropdown />
-      </div>
-      <div className='flex-1 border-r'>
-        <KidsDropdown />
+      <div className='flex-1 border-r '>
+        <CheckIn/>
       </div>
       <div className='flex-1 border-r'>
         <Refresh /> 

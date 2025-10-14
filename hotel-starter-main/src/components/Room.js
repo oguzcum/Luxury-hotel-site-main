@@ -33,7 +33,7 @@ const Room = ({room}) => {
           </div>
           <div className='flex gap-x-1'>
             <div>Alan</div>
-            <div>{size}m2</div>
+            <div className='notranslate'>{size}m2</div>
           </div>
         </div>
         { /* room capacity */}
@@ -41,7 +41,7 @@ const Room = ({room}) => {
           <div className='text-accent'>
             <BsPeople className='text-[18px]'/>
           </div>
-          <div className='flex gap-x-1'>
+          <div className='flex items-center gap-x-1'>
             <div>KİŞİ SAYISI</div>
             <div>{maxPerson}</div>
           </div>
@@ -56,7 +56,16 @@ const Room = ({room}) => {
       <p className='max-w-[300px] mx-auto mb-3 lg:mb-6'>{description.slice(0,56)+ '...'}</p>
     </div>
     { /* btn */}
-    <Link to={`/room/${id}`} className='btn btn-secondary btn-sm max-w-[240px] mx-auto'>Şimdi Rezervasyon Yap {price} TL</Link>
+    <Link 
+  to={`/room/${id}`} 
+  className="btn btn-secondary btn-sm max-w-[240px] mx-auto flex justify-center gap-1"
+><div>
+  <span>Şimdi Rezervasyon Yap </span>
+  <span className="notranslate"> {price}</span>
+  <span className="notranslate"> TL</span>
+  </div>
+</Link>
+
   </div>;
 };
 

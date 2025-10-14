@@ -16,9 +16,7 @@ const Rooms = () => {
     )}
     <div className='container mx-auto lg:px-0'>
       <div className='text-center'>
-        <div className='font-tertiary uppercase text-[15px] tracking-[6px]'>
-          Hotel Adina
-        </div>
+        
         <h2 className='font-primary text-[45px] mb-4'>Odalar & Daireler</h2>
       </div>
       <div className='grid grid-cols-1 max-w-sm mx-auto gap-[30px] lg:grid-cols-3 lg:max-w-none lg:mx-0'> 

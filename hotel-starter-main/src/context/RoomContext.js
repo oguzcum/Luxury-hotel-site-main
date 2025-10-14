@@ -87,7 +87,7 @@ const RoomProvider = ({ children }) => {
         allRooms,
         roomType,
         setRoomType,
-        total // total'i de ekledik
+        total 
       }}
     >
       {children}

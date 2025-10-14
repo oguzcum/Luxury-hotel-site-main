@@ -9,7 +9,7 @@ import {EffectFade, Autoplay} from 'swiper';
 //images
 const Img1 = '/balatodalar/Artist Antik 1/1e4.jpg';
 const Img2 = '/balatodalar/Pinkom 4/pinkom4e2.jpg';
-const Img3 = '../assets/img/heroSlider/3.jpg';
+const Img3 = '/balatodalar/Pinkom 3/pinkom3e1.jpg';
 
 const slides = [
   {
