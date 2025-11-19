@@ -6,6 +6,7 @@ import { RoomContext } from '../context/RoomContext';
 import Refresh from './Refresh';
 import RoomType from './RoomsType'
 import CheckIn from './CheckIn';
+import CheckOut from './CheckOut';
 
 const BookForm = () => {
   const {handleClick} = useContext(RoomContext)
@@ -18,10 +19,14 @@ const BookForm = () => {
         <CheckIn/>
       </div>
       <div className='flex-1 border-r'>
+        <CheckOut />
+      </div>
+      <div className='flex-1 border-r'>
         <Refresh /> 
       </div>
+      
 
-      <button onClick={(e)=> handleClick(e)} type='submit' className='btn btn-primary'>Hemen İncele</button>
+
     </div>
   </form>;
 };

@@ -11,6 +11,7 @@ const RoomDetails = () => {
   const { id } = useParams();
   const [images, setImages] = useState([]);
 
+
   // Görselleri çek
   useEffect(() => {
     const fetchImages = async () => {
@@ -34,7 +35,20 @@ const RoomDetails = () => {
   }
 
   const { name, image, description, facilities = [] } = room;
-
+  var link = "";
+  if (id == 4) {
+    link = "https://www.airbnb.com/rooms/1161664008389716366?source_impression_id=p3_1762508530_P3i0Ajd_3M727EyP";
+  } else if (id == 5) {
+    link = "https://www.airbnb.com/rooms/1161670080306403232?source_impression_id=p3_1762508530_P36YXsH608zlFDzL";
+  } else if (id == 6) {
+    link = "https://www.airbnb.com/rooms/1200111756457610405?source_impression_id=p3_1762508530_P33WLjs8b6Jdx4XJ";
+  } else if (id == 7) {
+    link = "https://www.airbnb.com/rooms/1428891192444829885?source_impression_id=p3_1762509591_P30aGXbBau5BdFvn";
+  }else if (id == 8) {
+    link = "https://www.airbnb.com/rooms/1428939196073293602?source_impression_id=p3_1762508530_P3xE2Kni2nwxKD6X";
+  } else {
+    link = "#";
+  }
   return (
     <section>
       <ScrollToTop />
@@ -118,6 +132,7 @@ const RoomDetails = () => {
                 );
               })}
             </div>
+            <button className="btn btn-primary mt-6"><a href={link}>AIRBNB ÜZERINDEN REZERVASYON YAP</a></button>
           </div>
         </div>
       </div>

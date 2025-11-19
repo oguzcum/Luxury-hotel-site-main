@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../datepicker.css";
 import { BsCalendar } from "react-icons/bs";
-import tr from "date-fns/locale/tr";  // Türkçe locale
+import tr from "date-fns/locale/tr";
+import { RoomContext } from "../context/RoomContext";
 
-// Türkçe gün isimleri için
 registerLocale("tr", tr);
 
 const CheckIn = () => {
-  const [startDate, setStartDate] = useState(null);
+  const { checkInDate, setCheckInDate } = useContext(RoomContext);
 
   return (
     <div className="relative flex items-center justify-end h-full">
@@ -19,12 +19,12 @@ const CheckIn = () => {
 
       <DatePicker
         className="w-full h-full"
-        id="1"
-        selected={startDate}
-        placeholderText="Giriş Tarihi"   // bu kısım çevrilebilir
-        onChange={(date) => setStartDate(date)}
-
-        calendarClassName="notranslate"  // günler çevrilmesin
+        selected={checkInDate}
+        onChange={(date) => setCheckInDate(date)}
+        placeholderText="Giriş Tarihi"
+        locale="tr"
+        minDate={new Date()}
+        calendarClassName="notranslate"
       />
     </div>
   );
