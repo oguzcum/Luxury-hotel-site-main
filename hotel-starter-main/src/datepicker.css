@@ -56,3 +56,19 @@
 .react-datepicker__day:hover {
   border-radius: 0;
 }
+
+/* Mevcut kodlarının en altına ekle */
+
+/* Dolu (Engellenmiş) Günler */
+.react-datepicker__day--disabled {
+  color: #ccc !important;       /* Yazı rengi gri */
+  background-color: #f3f3f3;    /* Arka plan çok açık gri */
+  text-decoration: line-through; /* Üstü çizili (isteğe bağlı) */
+  cursor: not-allowed;          /* Tıklanmaz imleci */
+  border-radius: 0;
+}
+
+.react-datepicker__day--disabled:hover {
+  background-color: #f3f3f3 !important; /* Hover olunca renk değişmesin */
+  color: #ccc !important;
+}

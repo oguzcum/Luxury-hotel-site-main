@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LoginBox from "../components/LoginBox";
+import moment from 'moment';
 
 const AdminPanel = () => {
   const [rooms, setRooms] = useState([]);
@@ -8,9 +9,11 @@ const AdminPanel = () => {
   const [descEdit, setDescEdit] = useState({});
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(!localStorage.getItem("token"));
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     fetchRooms();
+    fetchBookings();
   }, []);
 
   const fetchRooms = async () => {
@@ -24,6 +27,29 @@ const AdminPanel = () => {
     }
   };
 
+  const fetchBookings = async () => {
+    try {
+        const res = await axios.get("http://localhost:4000/api/admin/bookings", {
+             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setBookings(res.data);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const handleStatus = async (id, status) => {
+    try {
+         await axios.put(`http://localhost:4000/api/admin/bookings/${id}`, 
+         { status }, 
+         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+         );
+         fetchBookings(); // Listeyi yenile
+         alert(`Rezervasyon ${status === 'confirmed' ? 'Onaylandı' : 'Reddedildi'}`);
+    } catch (err) {
+        alert("İşlem başarısız");
+    }
+};
   const logout = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
@@ -80,6 +106,56 @@ const AdminPanel = () => {
           <div className="bg-blue-600 px-6 py-4">
             <h2 className="text-xl font-semibold text-white">Oda Yönetimi</h2>
           </div>
+
+          <div className="bg-white rounded-xl shadow-md overflow-hidden mt-8">
+        <div className="bg-purple-600 px-6 py-4">
+            <h2 className="text-xl font-semibold text-white">Rezervasyon İstekleri</h2>
+        </div>
+        <div className="p-6">
+            <table className="w-full text-left">
+                <thead>
+                    <tr className="border-b">
+                        <th className="p-2">Oda</th>
+                        <th className="p-2">Müşteri</th>
+                        <th className="p-2">Tarih</th>
+                        <th className="p-2">Durum</th>
+                        <th className="p-2">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {bookings.map((b) => (
+                        <tr key={b.id} className="border-b hover:bg-gray-50">
+                            <td className="p-2">{b.room_name}</td>
+                            <td className="p-2">
+                                {b.customer_name}<br/>
+                                <span className="text-xs text-gray-500">{b.customer_phone}</span>
+                            </td>
+                            <td className="p-2">
+                                {moment(b.check_in).format("DD/MM")} - {moment(b.check_out).format("DD/MM/YYYY")}
+                            </td>
+                            <td className="p-2">
+                                <span className={`px-2 py-1 rounded text-xs text-white ${
+                                    b.status === 'confirmed' ? 'bg-green-500' : 
+                                    b.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
+                                }`}>
+                                    {b.status === 'pending' ? 'Onay Bekliyor' : 
+                                     b.status === 'confirmed' ? 'Onaylı' : 'Reddedildi'}
+                                </span>
+                            </td>
+                            <td className="p-2 flex gap-2">
+                                {b.status === 'pending' && (
+                                    <>
+                                    <button onClick={() => handleStatus(b.id, 'confirmed')} className="bg-green-500 text-white px-2 py-1 rounded text-sm">Onayla</button>
+                                    <button onClick={() => handleStatus(b.id, 'rejected')} className="bg-red-500 text-white px-2 py-1 rounded text-sm">Reddet</button>
+                                    </>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
           {loading ? (
             <div className="flex justify-center py-12">Yükleniyor...</div>
