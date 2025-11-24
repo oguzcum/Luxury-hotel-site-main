@@ -4,7 +4,7 @@ import { FaWhatsapp } from "react-icons/fa"; // WhatsApp ikonu için react-icons
 const WhatsAppChat = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phone = "905398842502"; // Türkiye +90 kodlu numara
+  const phone = "905301109383"; // Türkiye +90 kodlu numara
 
   return (
     <>
@@ -35,7 +35,7 @@ const WhatsAppChat = () => {
             fontSize: "16px"
           }}>
             <FaWhatsapp size={20} style={{ marginRight: "8px" }} />
-            Hamza Peker - Satış Danışmanı 
+            Saadet  
           </div>
 
           {/* Mesaj alanı */}

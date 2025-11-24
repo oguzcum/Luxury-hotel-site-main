@@ -2,6 +2,7 @@ import React from 'react';
 //logo
 import LogoWhite from '../assets/img/balatlogo.png';
 import { FaInstagram, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import Pobac from "../assets/img/pobaclogo.jpeg"
 
 const Footer = () => {
   return (
@@ -27,6 +28,10 @@ const Footer = () => {
 
         {/* Telif hakkı */}
         <span className='mt-4 md:mt-0'>&copy; 2025. Tüm Hakları Korunmaktadır.</span>
+        
+        <a href='https://pobacsoftware.com' target='_blank' >
+          <img className='w-[160px] md:w-[120px]' src={Pobac} alt='Logo'/>
+        </a>
       </div>
     </footer>
   );

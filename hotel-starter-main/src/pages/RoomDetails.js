@@ -78,20 +78,8 @@ const RoomDetails = () => {
           )}
 
            {/* Oda Özellikleri (Alt tarafta geniş kalsın) */}
-           <div>
-            <h3 className="h3 mb-4">Oda Özellikleri</h3>
-            <div className="grid grid-cols-2 gap-4 mb-12">
-              {facilities.map((item, index) => {
-                const { name, icon } = item;
-                return (
-                  <div className="flex items-center gap-x-3" key={index}>
-                    <div className="text-2xl text-accent">{icon}</div>
-                    <div className="text-base">{name}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+           
+         
         </div>
 
         {/* SAĞ TARAFLAR: Rezervasyon Formu ve Kurallar */}

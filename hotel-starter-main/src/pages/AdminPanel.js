@@ -103,11 +103,7 @@ const handleStatus = async (id, status) => {
         </div>
 
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="bg-blue-600 px-6 py-4">
-            <h2 className="text-xl font-semibold text-white">Oda Yönetimi</h2>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md overflow-hidden mt-8">
+          <div className="bg-white rounded-xl shadow-md overflow-hidden ">
         <div className="bg-purple-600 px-6 py-4">
             <h2 className="text-xl font-semibold text-white">Rezervasyon İstekleri</h2>
         </div>
@@ -156,7 +152,9 @@ const handleStatus = async (id, status) => {
             </table>
         </div>
     </div>
-
+    <div className="bg-pink-600 rounded-xl shadow-md overflow-hidden mt-4 px-6 py-4">
+      <h2 className="text-xl font-semibold text-white">Oda Güncellemeleri</h2>
+    </div>
           {loading ? (
             <div className="flex justify-center py-12">Yükleniyor...</div>
           ) : (

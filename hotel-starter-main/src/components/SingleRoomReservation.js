@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import tr from "date-fns/locale/tr"; // Türkçe takvim
+import tr from "date-fns/locale/tr"; // Türkçe dil desteği
 import axios from "axios";
 import { BsCalendar } from "react-icons/bs";
 
@@ -13,27 +13,44 @@ const SingleRoomReservation = ({ roomId }) => {
   const [blockedDates, setBlockedDates] = useState([]);
   const [loading, setLoading] = useState(false);
   
-  // Form Verileri
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: ""
   });
 
-  // 1. Backend'den Dolu Günleri Çek
+  // --- YARDIMCI FONKSİYON ---
+  // Date objesini yerel saati bozmadan "YYYY-MM-DD" stringine çevirir.
+  // new Date().toISOString() kullanırsak UTC'ye çevirip günü geri atabilir, bu yüzden bunu kullanıyoruz.
+  const formatDateToString = (date) => {
+    if (!date) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // 1. Backend'den Dolu Günleri Çek ve Düzgün Parse Et
   useEffect(() => {
     const fetchBlockedDates = async () => {
       try {
         const res = await axios.get(`http://localhost:4000/api/room-availability/${roomId}`);
+        
+        // Backend'den ["2025-12-03", "2025-12-04"] gibi string listesi geliyor.
+        // Bunu doğrudan new Date() içine atarsak tarayıcı UTC sanıp günü geri kaydırabilir.
+        // Bu yüzden string'i manuel parçalayıp (split) oluşturuyoruz.
         const dates = res.data.map((dateStr) => {
-             // Saat farkı sorununu önlemek için string'i düzgün parse et
-             return new Date(dateStr); 
+             const [year, month, day] = dateStr.split("-").map(Number);
+             // Javascript'te aylar 0-11 arasıdır, o yüzden month - 1
+             return new Date(year, month - 1, day);
         });
+
         setBlockedDates(dates);
       } catch (err) {
         console.error("Takvim verisi alınamadı", err);
       }
     };
+
     if (roomId) fetchBlockedDates();
   }, [roomId]);
 
@@ -53,7 +70,6 @@ const SingleRoomReservation = ({ roomId }) => {
     }
 
     // Validasyon 2: Tarih Aralığında Dolu Gün Var mı?
-    // Kullanıcı giriş ve çıkış seçti ama arada dolu bir gün kalmış olabilir.
     const isRangeBlocked = blockedDates.some(date => 
         date > checkInDate && date < checkOutDate
     );
@@ -66,21 +82,30 @@ const SingleRoomReservation = ({ roomId }) => {
     setLoading(true);
 
     try {
+      // Backend'e Date objesi değil, formatlanmış STRING gönderiyoruz.
+      // Bu sayede "3 Aralık seçtim, sunucuya 2 Aralık gitti" sorunu çözülür.
+      const formattedCheckIn = formatDateToString(checkInDate);
+      const formattedCheckOut = formatDateToString(checkOutDate);
+
       const res = await axios.post("http://localhost:4000/api/book-room", {
         roomId,
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        checkIn: checkInDate,
-        checkOut: checkOutDate,
+        checkIn: formattedCheckIn,   // Örn: "2025-12-03"
+        checkOut: formattedCheckOut, // Örn: "2025-12-11"
       });
 
       if (res.data.success) {
         alert("Rezervasyon talebiniz alındı! Sizi arayarak onaylayacağız.");
-        // Formu temizle
+        
+        // Formu sıfırla
         setCheckInDate(null);
         setCheckOutDate(null);
         setFormData({ name: "", email: "", phone: "" });
+        
+        // Sayfayı yenile ki takvim güncellensin
+        window.location.reload();
       }
     } catch (err) {
       alert("Hata: " + (err.response?.data?.error || "Bir sorun oluştu."));
@@ -108,8 +133,9 @@ const SingleRoomReservation = ({ roomId }) => {
                 placeholderText="Tarih Seçiniz"
                 locale="tr"
                 minDate={new Date()}
-                excludeDates={blockedDates} // Dolu günleri engelle
+                excludeDates={blockedDates}
                 dateFormat="dd/MM/yyyy"
+                calendarClassName="notranslate"
             />
             </div>
         </div>
@@ -127,9 +153,10 @@ const SingleRoomReservation = ({ roomId }) => {
                 placeholderText="Tarih Seçiniz"
                 locale="tr"
                 minDate={checkInDate || new Date()}
-                excludeDates={blockedDates} // Dolu günleri engelle
+                excludeDates={blockedDates}
                 dateFormat="dd/MM/yyyy"
                 disabled={!checkInDate}
+                calendarClassName="notranslate"
             />
             </div>
         </div>

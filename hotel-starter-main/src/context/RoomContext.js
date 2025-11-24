@@ -43,27 +43,48 @@ useEffect(() => {
   }, [allRooms, roomType]);
 
   // 🔍 Tarihe göre backend'den uygun odaları çek
-  const filterByDateRange = useCallback(async () => {
+const filterByDateRange = useCallback(async () => {
     if (!checkInDate || !checkOutDate) return;
 
     setLoading(true);
+    // Arama başladığında odaları geçici olarak boşalt ki kullanıcı eski listeyi görmesin
+    // Bu isteğe bağlıdır, loading spinner zaten dönüyor ama garanti olur.
+    // setAllRooms([]); 
+
     try {
-      const checkInStr = checkInDate.toISOString().split("T")[0];
-      const checkOutStr = checkOutDate.toISOString().split("T")[0];
+      // Tarihleri yerel saat dilimine dikkat ederek gönder (Opsiyonel düzeltme)
+      // .split('T')[0] bazen saat farkından bir gün geriyi alabilir.
+      // Aşağıdaki yöntem daha güvenlidir:
+      const checkInStr = new Date(checkInDate.getTime() - (checkInDate.getTimezoneOffset() * 60000)).toISOString().split("T")[0];
+      const checkOutStr = new Date(checkOutDate.getTime() - (checkOutDate.getTimezoneOffset() * 60000)).toISOString().split("T")[0];
 
       const res = await axios.get("http://localhost:4000/api/rooms", {
         params: { checkIn: checkInStr, checkOut: checkOutStr },
       });
 
-      // Backend'den dönen odaları kaydet (ancak roomType filtresi korunacak)
       const availableRooms = res.data;
-      setAllRooms(availableRooms); // Tüm odaları güncelle
+      setAllRooms(availableRooms);
+      
+      // Eğer roomType seçiliyse filtreyi tekrar uygula
+      if (roomType !== "Tümü") {
+         const filtered = availableRooms.filter((room) =>
+            room.name?.toLowerCase().includes(roomType.toLowerCase())
+         );
+         setRooms(filtered);
+      } else {
+         setRooms(availableRooms);
+      }
+
     } catch (err) {
       console.error("Tarih aralığına göre odalar alınamadı:", err);
+      // HATA OLURSA ODALARI BOŞALT (Kullanıcı "hepsi dolu" sansın, "hepsi boş" sanmasın!)
+      setAllRooms([]);
+      setRooms([]); 
+      alert("Bağlantı hatası oluştu. Lütfen tekrar deneyiniz.");
     } finally {
       setLoading(false);
     }
-  }, [checkInDate, checkOutDate]);
+  }, [checkInDate, checkOutDate, roomType]);
 
   // Kullanıcı tarih seçtikçe filtreleme tetikle
   useEffect(() => {
