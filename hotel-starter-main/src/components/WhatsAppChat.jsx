@@ -35,7 +35,7 @@ const WhatsAppChat = () => {
             fontSize: "16px"
           }}>
             <FaWhatsapp size={20} style={{ marginRight: "8px" }} />
-            Saadet  
+            Saadet  Hanım
           </div>
 
           {/* Mesaj alanı */}
